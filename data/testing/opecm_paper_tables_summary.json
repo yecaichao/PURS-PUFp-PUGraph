@@ -1,0 +1,14 @@
+{
+  "parent_csv": "D:\\OneDrive\\MaterChem&MachLearn Group\\\u5218\u79c0\u654f\\\u5218\u79c0\u654f\u535a\u58eb\u5b66\u4f4d\u8bba\u6587\\PURS-PUFp-PUGraph\\data\\testing\\opecm_osc_parent.csv",
+  "paper54_tasks_csv": "D:\\OneDrive\\MaterChem&MachLearn Group\\\u5218\u79c0\u654f\\\u5218\u79c0\u654f\u535a\u58eb\u5b66\u4f4d\u8bba\u6587\\PURS-PUFp-PUGraph\\data\\testing\\opecm_paper54_tasks.csv",
+  "paper67_tasks_csv": "D:\\OneDrive\\MaterChem&MachLearn Group\\\u5218\u79c0\u654f\\\u5218\u79c0\u654f\u535a\u58eb\u5b66\u4f4d\u8bba\u6587\\PURS-PUFp-PUGraph\\data\\testing\\opecm_paper67_tasks.csv",
+  "counts": {
+    "parent_rows": 3225,
+    "paper54_ready_rows": 573,
+    "paper67_ready_rows": 573,
+    "valid_smiles_rows": 3117,
+    "n_type_rows": 154,
+    "p_type_rows": 397,
+    "tie_rows": 22
+  }
+}

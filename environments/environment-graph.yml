@@ -1,0 +1,16 @@
+name: purs-graph
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - rdkit
+  - pytorch
+  - cpuonly
+  - pyyaml
+  - pip
+  - pip:
+      - torchgraphs

@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+.mypy_cache/
+.venv/
+venv/
+build/
+dist/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# Generated outputs
+output/
+outputs/
+results/
+artifacts/
+tmp/
+
+# Local environments
+.env
+.conda/

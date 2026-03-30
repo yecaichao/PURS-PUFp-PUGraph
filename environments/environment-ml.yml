@@ -1,0 +1,11 @@
+name: purs-ml
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - rdkit
+  - scikit-learn
+  - matplotlib

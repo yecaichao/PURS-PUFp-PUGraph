@@ -1,0 +1,22 @@
+name: purs-all
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - pandas
+  - rdkit
+  - scikit-learn
+  - matplotlib
+  - pytorch
+  - cpuonly
+  - pyyaml
+  - pillow
+  - cairosvg
+  - pip
+  - pip:
+      - torchgraphs
+      - tensorflow-cpu==2.15.1
+      - sparse

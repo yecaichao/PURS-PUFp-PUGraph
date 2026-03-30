@@ -1,0 +1,4 @@
+sample_id,smiles,target
+667,O=c(c1=Cc2sc(c3ccc(c4c5cc(c6sc(C=c(c(=O)c7c8cccc7)c8=C(C#N)C#N)cc6)cc4)c(C5(CCCCCCCCCC)CCCCCCCCCC)c3)cc2)c(cccc9)c9c1=C(C#N)C#N,6.93
+668,O=c(c1=Cc2sc(c3ccc(c4c5cc(c6sc(C=c(c(=O)c7c8cccc7)c8=C(C#N)C#N)cc6)cc4)c(C5(COCCOCCOCC)COCCOCCOCC)c3)cc2)c(cccc9)c9c1=C(C#N)C#N,3.09
+670,O=C(C1=C(N(CCCCCCCCCC)C(C1C2C3=CC=C(S3)C(/C(C4=CC=C(C=C4)N5C(C=CC=C6)=C6C7=C5C=CC=C7)=C(C#N)/C#N)=C(C#N)\C#N)=O)C8=CC=CS8)N2CCCCCCCCCC,9.29
