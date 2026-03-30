@@ -59,9 +59,9 @@
 
 数据任务层，负责统一标准样例表的任务标签逻辑。
 
-## 发布版入口
+## 入口
 
-当前发布版只保留一个公开样例：
+当前有一个公开样例：
 
 - `examples/opecm_standard_demo/`
 
@@ -76,14 +76,4 @@
 - 分类演示
 - 图输入准备
 
-## 最小公开结构
-
-```text
-PURS-PUFp-PUGraph/
-  src/purs/
-  examples/opecm_standard_demo/
-  data/testing/opecm_paper54_tasks.csv
-  docs/
-  scripts/
-  tests/
 ```
