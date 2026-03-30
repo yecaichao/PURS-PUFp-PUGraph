@@ -6,4 +6,4 @@ Recommended cleanup goals:
 
 - remove notebook-only assumptions
 - define a config-driven training entry point
-- keep publication-specific settings inside `repro/jctc_2024_pugraph/`
+- keep package-facing settings close to the generated graph configs

@@ -6,7 +6,7 @@ Recommended cleanup goals:
 
 - separate reusable library code from experiment scripts
 - move heavy environment requirements into `environment-graph.yml`
-- keep paper-specific reproduction details inside `repro/jctc_2024_pugraph/`
+- keep package-facing preprocessing details close to the generated graph configs
 
 Current unified entry points:
 

@@ -27,6 +27,14 @@ DEFAULT_RAW_FEATURE_COLUMNS = [
     "Eg/eV",
 ]
 
+DEFAULT_STANDARD_SCALAR_COLUMNS = [
+    "homo",
+    "lumo",
+    "eg",
+    "alpha",
+    "mu",
+]
+
 MAX_SAFE_FEATURE_MAGNITUDE = 1e12
 
 
@@ -93,6 +101,33 @@ def build_opecm_descriptor_feature_table(
     feature_columns = [column for column in descriptor_df.columns if column not in reserved_columns]
     feature_df = descriptor_df[["sample_id", *feature_columns]].copy()
     for column in feature_columns:
+        feature_df[column] = pd.to_numeric(feature_df[column], errors="coerce")
+        feature_df[column] = stabilize_extreme_numeric_series(feature_df[column])
+    feature_df = feature_df.dropna().drop_duplicates(subset=["sample_id"]).set_index("sample_id")
+
+    if output_csv is not None:
+        output_path = Path(output_csv)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        feature_df.to_csv(output_path)
+
+    return feature_df
+
+
+def build_standard_scalar_feature_table(
+    input_csv: str | Path,
+    output_csv: str | Path | None = None,
+    feature_columns: list[str] | None = None,
+) -> pd.DataFrame:
+    source_df = pd.read_csv(input_csv).copy()
+    selected_columns = feature_columns or DEFAULT_STANDARD_SCALAR_COLUMNS
+    required_columns = ["sample_id", *selected_columns]
+    missing_columns = [column for column in required_columns if column not in source_df.columns]
+    if missing_columns:
+        raise KeyError(f"Missing columns in standard sample table: {missing_columns}")
+
+    feature_df = source_df[required_columns].copy()
+    feature_df["sample_id"] = feature_df["sample_id"].map(str)
+    for column in selected_columns:
         feature_df[column] = pd.to_numeric(feature_df[column], errors="coerce")
         feature_df[column] = stabilize_extreme_numeric_series(feature_df[column])
     feature_df = feature_df.dropna().drop_duplicates(subset=["sample_id"]).set_index("sample_id")

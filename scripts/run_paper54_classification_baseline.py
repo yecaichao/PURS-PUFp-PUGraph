@@ -8,8 +8,7 @@ import pandas as pd
 
 from purs.fingerprint.build import build_pufp
 from purs.ml.feature_fusion import (
-    build_opecm_descriptor_feature_table,
-    build_opecm_raw_feature_table,
+    build_standard_scalar_feature_table,
     combine_feature_tables,
 )
 from purs.ml.classification import (
@@ -22,8 +21,6 @@ from purs.ml.classification import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = REPO_ROOT / "data" / "testing" / "opecm_paper54_tasks.csv"
-DEFAULT_RAW = REPO_ROOT / "data" / "external" / "opecm" / "1_raw_data.csv"
-DEFAULT_DESCRIPTORS = REPO_ROOT / "data" / "processed" / "opecm" / "3_Descriptors.csv"
 DEFAULT_OUTPUT = REPO_ROOT / "output" / "paper54_classification_baseline"
 
 TASK_CONFIGS = {
@@ -113,8 +110,6 @@ def write_summary_tables(summary: dict, output_dir: Path) -> dict[str, str]:
 
 def main(
     input_csv: Path,
-    raw_csv: Path,
-    descriptor_csv: Path,
     output_dir: Path,
     task: str = "both",
     quick: bool = True,
@@ -132,52 +127,26 @@ def main(
     )
     pufp_feature_csv = pufp_dir / "number.csv"
 
-    raw_feature_csv = output_dir / "raw_features.csv"
-    descriptor_feature_csv = output_dir / "descriptor_features.csv"
-    build_opecm_raw_feature_table(raw_csv=raw_csv, output_csv=raw_feature_csv)
-    build_opecm_descriptor_feature_table(descriptor_csv=descriptor_csv, output_csv=descriptor_feature_csv)
+    scalar_feature_csv = output_dir / "scalar_features.csv"
+    build_standard_scalar_feature_table(input_csv=input_csv, output_csv=scalar_feature_csv)
 
-    pufp_plus_raw_csv = output_dir / "pufp_plus_raw.csv"
-    pufp_plus_descriptors_csv = output_dir / "pufp_plus_descriptors.csv"
-    raw_plus_descriptors_csv = output_dir / "raw_plus_descriptors.csv"
-    pufp_plus_raw_plus_descriptors_csv = output_dir / "pufp_plus_raw_plus_descriptors.csv"
+    pufp_plus_scalars_csv = output_dir / "pufp_plus_scalars.csv"
 
     combine_feature_tables(
         base_feature_csv=pufp_feature_csv,
-        extra_feature_tables=[raw_feature_csv],
-        output_csv=pufp_plus_raw_csv,
-    )
-    combine_feature_tables(
-        base_feature_csv=pufp_feature_csv,
-        extra_feature_tables=[descriptor_feature_csv],
-        output_csv=pufp_plus_descriptors_csv,
-    )
-    combine_feature_tables(
-        base_feature_csv=raw_feature_csv,
-        extra_feature_tables=[descriptor_feature_csv],
-        output_csv=raw_plus_descriptors_csv,
-    )
-    combine_feature_tables(
-        base_feature_csv=pufp_feature_csv,
-        extra_feature_tables=[raw_feature_csv, descriptor_feature_csv],
-        output_csv=pufp_plus_raw_plus_descriptors_csv,
+        extra_feature_tables=[scalar_feature_csv],
+        output_csv=pufp_plus_scalars_csv,
     )
 
     feature_sets = {
         "pufp": pufp_feature_csv,
-        "raw_features": raw_feature_csv,
-        "descriptor_features": descriptor_feature_csv,
-        "pufp_plus_raw": pufp_plus_raw_csv,
-        "pufp_plus_descriptors": pufp_plus_descriptors_csv,
-        "raw_plus_descriptors": raw_plus_descriptors_csv,
-        "pufp_plus_raw_plus_descriptors": pufp_plus_raw_plus_descriptors_csv,
+        "scalar_features": scalar_feature_csv,
+        "pufp_plus_scalars": pufp_plus_scalars_csv,
     }
 
     selected_tasks = TASK_CONFIGS.keys() if task == "both" else [task]
     summary = {
         "input_csv": str(input_csv),
-        "raw_csv": str(raw_csv),
-        "descriptor_csv": str(descriptor_csv),
         "build_result": build_result,
         "feature_sets": {name: str(path) for name, path in feature_sets.items()},
         "tasks": {},
@@ -231,8 +200,6 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run paper54-style PUFp classification baselines on OPECM OSC tasks.")
     parser.add_argument("--input-csv", type=Path, default=DEFAULT_INPUT)
-    parser.add_argument("--raw-csv", type=Path, default=DEFAULT_RAW)
-    parser.add_argument("--descriptor-csv", type=Path, default=DEFAULT_DESCRIPTORS)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--task", choices=["carrier_type", "mobility_class3", "both"], default="both")
     parser.add_argument("--cv", type=int, default=3)
@@ -241,8 +208,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(
         input_csv=args.input_csv,
-        raw_csv=args.raw_csv,
-        descriptor_csv=args.descriptor_csv,
         output_dir=args.output_dir,
         task=args.task,
         quick=not args.full,

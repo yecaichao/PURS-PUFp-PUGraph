@@ -23,6 +23,7 @@ warnings.filterwarnings("ignore", category=DeprecationWarning, module=r"pandas\.
 REPO_ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = REPO_ROOT / "tests" / "fixtures"
 DATA_TESTING = REPO_ROOT / "data" / "testing"
+STANDARD_SAMPLE = DATA_TESTING / "opecm_paper54_tasks.csv"
 HAS_WORKFLOW_DEPS = all(
     importlib.util.find_spec(module_name) is not None
     for module_name in ("rdkit", "sklearn", "yaml")
@@ -137,12 +138,16 @@ class WorkflowTests(unittest.TestCase):
     def test_graph_dataset_normalizes_name_smiles_and_target_columns(self):
         from purs.graph.dataset import build_graph_input_csv
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = build_graph_input_csv(input_csv=input_csv, output_dir=tmpdir)
+            result = build_graph_input_csv(
+                input_csv=FIXTURES / "opecm_common_tiny.csv",
+                output_dir=tmpdir,
+                name_column="sample_id",
+                smiles_column="smiles",
+            )
             graph_df = pd.read_csv(result["graph_input_csv"])
             self.assertEqual(graph_df.columns.tolist(), ["Compound ID", "smiles", "PCE_max"])
-            self.assertEqual(result["target_column"], "PCE_max")
+            self.assertEqual(result["target_column"], "graph_target")
 
     def test_graph_dataset_detects_common_opecm_graph_target(self):
         from purs.graph.dataset import build_graph_input_csv
@@ -159,40 +164,25 @@ class WorkflowTests(unittest.TestCase):
             self.assertEqual(result["target_column"], "graph_target")
             self.assertIn("PCE_max", graph_df.columns)
 
-    def test_opecm_raw_feature_table_builds_expected_columns(self):
-        from purs.ml.feature_fusion import build_opecm_raw_feature_table
+    def test_standard_scalar_feature_table_builds_expected_columns(self):
+        from purs.ml.feature_fusion import build_standard_scalar_feature_table
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            output_csv = Path(tmpdir) / "raw_features.csv"
-            feature_df = build_opecm_raw_feature_table(
-                raw_csv=REPO_ROOT / "data" / "external" / "opecm" / "1_raw_data.csv",
+            output_csv = Path(tmpdir) / "scalar_features.csv"
+            feature_df = build_standard_scalar_feature_table(
+                input_csv=STANDARD_SAMPLE,
                 output_csv=output_csv,
             )
             self.assertTrue(output_csv.exists())
             self.assertEqual(
                 list(feature_df.columns),
-                ["-HOMO/eV", "-LUMO/eV", "Eg/eV"],
+                ["homo", "lumo", "eg", "alpha", "mu"],
             )
             self.assertIn("1", feature_df.index)
 
-    def test_opecm_descriptor_feature_table_builds_expected_columns(self):
-        from purs.ml.feature_fusion import build_opecm_descriptor_feature_table
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            output_csv = Path(tmpdir) / "descriptor_features.csv"
-            feature_df = build_opecm_descriptor_feature_table(
-                descriptor_csv=REPO_ROOT / "data" / "processed" / "opecm" / "3_Descriptors.csv",
-                output_csv=output_csv,
-            )
-            self.assertTrue(output_csv.exists())
-            self.assertIn("MaxAbsEStateIndex", feature_df.columns)
-            self.assertIn("NumAromaticHeterocycles.1", feature_df.columns)
-            self.assertIn("1", feature_df.index)
-            self.assertLess(feature_df["Ipc"].abs().max(), 1e12)
-
-    def test_feature_fusion_combines_pufp_and_raw_features(self):
+    def test_feature_fusion_combines_pufp_and_scalar_features(self):
         from purs.fingerprint.build import build_pufp
-        from purs.ml.feature_fusion import build_opecm_raw_feature_table, combine_feature_tables
+        from purs.ml.feature_fusion import build_standard_scalar_feature_table, combine_feature_tables
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_path = Path(tmpdir)
@@ -202,62 +192,30 @@ class WorkflowTests(unittest.TestCase):
                 smiles_column="smiles",
                 output_dir=tmp_path / "pufp",
             )
-            raw_csv = tmp_path / "raw_features.csv"
-            build_opecm_raw_feature_table(
-                raw_csv=REPO_ROOT / "data" / "external" / "opecm" / "1_raw_data.csv",
-                output_csv=raw_csv,
+            scalar_csv = tmp_path / "scalar_features.csv"
+            build_standard_scalar_feature_table(
+                input_csv=STANDARD_SAMPLE,
+                output_csv=scalar_csv,
             )
             fused = combine_feature_tables(
                 base_feature_csv=Path(build_result["output_dir"]) / "number.csv",
-                extra_feature_tables=[raw_csv],
+                extra_feature_tables=[scalar_csv],
                 output_csv=tmp_path / "fused.csv",
             )
             self.assertEqual(len(fused), 3)
             self.assertGreater(fused.shape[1], 9)
-            self.assertIn("-HOMO/eV", fused.columns)
-
-    def test_feature_fusion_combines_pufp_raw_and_descriptors(self):
-        from purs.fingerprint.build import build_pufp
-        from purs.ml.feature_fusion import (
-            build_opecm_descriptor_feature_table,
-            build_opecm_raw_feature_table,
-            combine_feature_tables,
-        )
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp_path = Path(tmpdir)
-            build_result = build_pufp(
-                input_csv=FIXTURES / "mobility_tiny.csv",
-                name_column="sample_id",
-                smiles_column="smiles",
-                output_dir=tmp_path / "pufp",
-            )
-            raw_csv = tmp_path / "raw_features.csv"
-            descriptor_csv = tmp_path / "descriptor_features.csv"
-            build_opecm_raw_feature_table(
-                raw_csv=REPO_ROOT / "data" / "external" / "opecm" / "1_raw_data.csv",
-                output_csv=raw_csv,
-            )
-            build_opecm_descriptor_feature_table(
-                descriptor_csv=REPO_ROOT / "data" / "processed" / "opecm" / "3_Descriptors.csv",
-                output_csv=descriptor_csv,
-            )
-            fused = combine_feature_tables(
-                base_feature_csv=Path(build_result["output_dir"]) / "number.csv",
-                extra_feature_tables=[raw_csv, descriptor_csv],
-                output_csv=tmp_path / "fused_all.csv",
-            )
-            self.assertEqual(len(fused), 3)
-            self.assertGreater(fused.shape[1], 100)
-            self.assertIn("-HOMO/eV", fused.columns)
-            self.assertIn("MaxAbsEStateIndex", fused.columns)
+            self.assertIn("homo", fused.columns)
 
     def test_graph_build_writes_manifests_and_graph_input(self):
         from purs.graph.builders import build_pugraph
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = build_pugraph(input_csv=input_csv, output_dir=tmpdir)
+            result = build_pugraph(
+                input_csv=FIXTURES / "opecm_common_tiny.csv",
+                output_dir=tmpdir,
+                name_column="sample_id",
+                smiles_column="smiles",
+            )
             self.assertTrue(Path(result["graph_input_csv"]).exists())
             self.assertTrue(Path(result["dataset_manifest_json"]).exists())
             self.assertTrue(Path(result["build_manifest_json"]).exists())
@@ -354,9 +312,13 @@ class WorkflowTests(unittest.TestCase):
     def test_graph_train_returns_command_wrapper(self):
         from purs.graph.builders import build_pugraph, train_pugraph
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
-            build_result = build_pugraph(input_csv=input_csv, output_dir=tmpdir)
+            build_result = build_pugraph(
+                input_csv=FIXTURES / "opecm_common_tiny.csv",
+                output_dir=tmpdir,
+                name_column="sample_id",
+                smiles_column="smiles",
+            )
             train_result = train_pugraph(build_result["pu_gn_exp_train_yaml"])
             self.assertEqual(train_result["backend"], "pu_gn_exp")
             self.assertEqual(train_result["mode"], "command_only")
@@ -382,11 +344,18 @@ class WorkflowTests(unittest.TestCase):
     def test_pu_mpnn_release_check_csv_wrapper(self):
         from purs.graph.pu_mpnn.prepare import build_release_check_csv
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
             dst_csv = Path(tmpdir) / "release_check.csv"
-            df = build_release_check_csv(input_csv, dst_csv, limit=2)
-            input_df = pd.read_csv(input_csv).head(2)
+            source_csv = Path(tmpdir) / "source.csv"
+            input_df = pd.DataFrame(
+                {
+                    "sample_id": ["1", "2"],
+                    "smiles": ["C", "CC"],
+                    "PCE_max": [1.0, 2.0],
+                }
+            )
+            input_df.to_csv(source_csv, index=False)
+            df = build_release_check_csv(source_csv, dst_csv, limit=2)
             self.assertTrue(dst_csv.exists())
             self.assertEqual(list(df.columns), ["name", "smiles", "target"])
             self.assertEqual(len(df), 2)
@@ -522,9 +491,13 @@ class WorkflowTests(unittest.TestCase):
         import yaml
         from purs.graph.builders import build_pugraph, train_pugraph
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = build_pugraph(input_csv=input_csv, output_dir=tmpdir)
+            result = build_pugraph(
+                input_csv=FIXTURES / "opecm_common_tiny.csv",
+                output_dir=tmpdir,
+                name_column="sample_id",
+                smiles_column="smiles",
+            )
             config_path = Path(result["pu_gn_exp_train_yaml"])
             cfg = yaml.safe_load(config_path.read_text(encoding="utf-8"))
             cfg["mode"] = "execute"
@@ -548,9 +521,13 @@ class WorkflowTests(unittest.TestCase):
         import yaml
         from purs.graph.builders import build_pugraph, train_pugraph
 
-        input_csv = REPO_ROOT / "examples" / "pugraph_demo" / "input.csv"
         with tempfile.TemporaryDirectory() as tmpdir:
-            result = build_pugraph(input_csv=input_csv, output_dir=tmpdir)
+            result = build_pugraph(
+                input_csv=FIXTURES / "opecm_common_tiny.csv",
+                output_dir=tmpdir,
+                name_column="sample_id",
+                smiles_column="smiles",
+            )
             config_path = Path(result["pu_mpnn_train_yaml"])
             cfg = yaml.safe_load(config_path.read_text(encoding="utf-8"))
             cfg["mode"] = "execute"
