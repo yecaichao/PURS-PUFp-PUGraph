@@ -87,7 +87,7 @@ python scripts/run_smoke_release.py
 ```powershell
 $env:PYTHONPATH='src'
 python -m purs.cli recognize `
-  --input-csv examples/basic_recognition/input.csv `
+  --input-csv repro/supplementary_examples/basic_recognition/input.csv `
   --output-dir output/basic
 ```
 
@@ -107,7 +107,7 @@ python -m purs.cli recognize `
 ```powershell
 $env:PYTHONPATH='src'
 python -m purs.cli fingerprint `
-  --input-csv examples/pufp_opv_demo/input.csv `
+  --input-csv repro/supplementary_examples/pufp_opv_demo/input.csv `
   --name-column sample_id `
   --smiles-column smiles `
   --output-dir output/pufp
@@ -119,7 +119,7 @@ python -m purs.cli fingerprint `
 $env:PYTHONPATH='src'
 python -m purs.cli ml rf `
   --feature-csv output/pufp/number.csv `
-  --target-csv examples/pufp_opv_demo/target.csv `
+  --target-csv repro/supplementary_examples/pufp_opv_demo/target.csv `
   --id-column sample_id `
   --target-column target `
   --quick
@@ -137,7 +137,7 @@ python -m purs.cli ml rf `
 ```powershell
 $env:PYTHONPATH='src'
 python -m purs.cli graph build `
-  --input-csv examples/pugraph_demo/input.csv `
+  --input-csv repro/supplementary_examples/pugraph_demo/input.csv `
   --output-dir output/graph
 ```
 

@@ -94,7 +94,7 @@ These datasets should be small and quick to run.
 
 Placement:
 
-- `examples/basic_recognition/input.csv`
+- `repro/supplementary_examples/basic_recognition/input.csv`
 
 Role:
 
@@ -104,8 +104,8 @@ Role:
 
 Placement:
 
-- `examples/pufp_mobility_demo/input.csv`
-- `examples/pufp_mobility_demo/target.csv`
+- `repro/supplementary_examples/pufp_mobility_demo/input.csv`
+- `repro/supplementary_examples/pufp_mobility_demo/target.csv`
 
 Role:
 
@@ -116,7 +116,7 @@ Role:
 
 Placement:
 
-- `examples/pugraph_demo/input.csv`
+- `repro/supplementary_examples/pugraph_demo/input.csv`
 
 Role:
 
@@ -129,9 +129,9 @@ Role:
 
 Placement:
 
-- `examples/opecm_demo/input.csv`
-- `examples/pufp_opv_demo/input.csv`
-- `examples/pufp_opv_demo/target.csv`
+- `repro/supplementary_examples/opecm_demo/input.csv`
+- `repro/supplementary_examples/pufp_opv_demo/input.csv`
+- `repro/supplementary_examples/pufp_opv_demo/target.csv`
 
 Role:
 

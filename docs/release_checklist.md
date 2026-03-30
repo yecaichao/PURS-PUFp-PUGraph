@@ -5,14 +5,13 @@
 For a publishable package, prioritize example-based validation first.
 
 1. Review the top-level README and `examples/README.md`.
-2. Run one `PURS` example from `examples/basic_recognition/` or `examples/opecm_demo/`.
-3. Run one `PUFp + ML` example from `examples/pufp_mobility_demo/`.
-4. Run one `PUGraph` example from `examples/pugraph_demo/`.
-5. Verify the example READMEs match the current commands and file names.
-6. Review `environment-core.yml`, `environment-ml.yml`, `environment-graph.yml`, and `environment-all.yml`.
-7. Review docs linked from the top-level README.
-8. Confirm legacy wrappers still exist if backward compatibility is required.
-9. Update citations and changelog if scientific scope changed.
+2. Run the public standard demo from `examples/opecm_standard_demo/`.
+3. If needed, run one focused supplementary workflow slice.
+4. Verify the example READMEs match the current commands and file names.
+5. Review `environment-core.yml`, `environment-ml.yml`, `environment-graph.yml`, and `environment-all.yml`.
+6. Review docs linked from the top-level README.
+7. Confirm legacy wrappers still exist if backward compatibility is required.
+8. Update citations and changelog if scientific scope changed.
 
 ## Optional internal validation
 

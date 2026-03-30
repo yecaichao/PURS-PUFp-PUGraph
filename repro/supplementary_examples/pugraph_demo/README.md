@@ -18,7 +18,7 @@ Source:
 Build graph assets:
 
 ```bash
-purs graph build --input-csv examples/pugraph_demo/input.csv --output-dir output/graph_demo
+purs graph build --input-csv repro/supplementary_examples/pugraph_demo/input.csv --output-dir output/graph_demo
 ```
 
 Inspect or run a wrapped backend:

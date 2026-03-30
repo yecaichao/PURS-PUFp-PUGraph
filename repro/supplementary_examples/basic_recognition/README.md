@@ -11,5 +11,5 @@ Expected purpose:
 Example command:
 
 ```bash
-purs recognize --input-csv examples/basic_recognition/input.csv --output-dir output/basic
+purs recognize --input-csv repro/supplementary_examples/basic_recognition/input.csv --output-dir output/basic
 ```

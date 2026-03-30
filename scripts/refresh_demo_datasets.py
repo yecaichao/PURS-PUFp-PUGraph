@@ -153,6 +153,8 @@ def refresh_examples_and_fixtures(
     ue_dataset: pd.DataFrame,
     standard_dataset: pd.DataFrame,
 ) -> None:
+    supplementary_root = ROOT / "repro" / "supplementary_examples"
+
     valid_df = common_dataset[common_dataset["expected_valid"]].reset_index(drop=True)
     invalid_df = common_dataset[~common_dataset["expected_valid"]].reset_index(drop=True)
     valid_pce_df = pce_dataset[pce_dataset["expected_valid"]].reset_index(drop=True)
@@ -160,27 +162,27 @@ def refresh_examples_and_fixtures(
     valid_standard_df = standard_dataset[standard_dataset["expected_valid"]].reset_index(drop=True)
 
     write_csv(
-        ROOT / "examples" / "basic_recognition" / "input.csv",
+        supplementary_root / "basic_recognition" / "input.csv",
         valid_df.head(4)[["sample_id", "smiles"]].rename(columns={"sample_id": "name"}),
     )
     write_csv(
-        ROOT / "examples" / "opecm_demo" / "input.csv",
+        supplementary_root / "opecm_demo" / "input.csv",
         common_dataset[["sample_id", "smiles"]],
     )
     ml_input = valid_pce_df.head(8)[["sample_id", "smiles"]]
     ml_target = valid_pce_df.head(8)[["sample_id", "regression_target"]].rename(columns={"regression_target": "target"})
-    write_csv(ROOT / "examples" / "pufp_opv_demo" / "input.csv", ml_input)
-    write_csv(ROOT / "examples" / "pufp_opv_demo" / "target.csv", ml_target)
+    write_csv(supplementary_root / "pufp_opv_demo" / "input.csv", ml_input)
+    write_csv(supplementary_root / "pufp_opv_demo" / "target.csv", ml_target)
 
     mobility_input = valid_standard_df.head(8)[["sample_id", "smiles"]]
     mobility_target = valid_standard_df.head(8)[["sample_id", "max_mobility"]].rename(columns={"max_mobility": "target"})
-    write_csv(ROOT / "examples" / "pufp_mobility_demo" / "input.csv", mobility_input)
-    write_csv(ROOT / "examples" / "pufp_mobility_demo" / "target.csv", mobility_target)
+    write_csv(supplementary_root / "pufp_mobility_demo" / "input.csv", mobility_input)
+    write_csv(supplementary_root / "pufp_mobility_demo" / "target.csv", mobility_target)
 
     graph_input = valid_standard_df.head(8)[["sample_id", "smiles", "ue"]].rename(
         columns={"sample_id": "Compound ID", "ue": "PCE_max"}
     )
-    write_csv(ROOT / "examples" / "pugraph_demo" / "input.csv", graph_input)
+    write_csv(supplementary_root / "pugraph_demo" / "input.csv", graph_input)
 
     write_csv(
         ROOT / "tests" / "fixtures" / "tiny_polymers.csv",

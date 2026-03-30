@@ -94,10 +94,10 @@
 
 当前示例包括：
 
-- `examples/basic_recognition/`
-- `examples/opecm_demo/`
-- `examples/pufp_opv_demo/`
-- `examples/pugraph_demo/`
+- `repro/supplementary_examples/basic_recognition/`
+- `repro/supplementary_examples/opecm_demo/`
+- `repro/supplementary_examples/pufp_opv_demo/`
+- `repro/supplementary_examples/pugraph_demo/`
 
 ### 4.3 测试夹具层
 
@@ -189,7 +189,7 @@
 
 ### 7.1 PURS / PUFp
 
-已使用 `examples/opecm_demo/input.csv` 进行真实 smoke test。
+已使用 `repro/supplementary_examples/opecm_demo/input.csv` 进行真实 smoke test。
 
 已成功生成：
 

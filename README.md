@@ -57,45 +57,28 @@ Conda environment files are provided in `environments/`:
 - `environment-graph.yml`
 - `environment-all.yml`
 
-## Main Package Commands
+## Public Example
 
-### PURS
+The released package now recommends one public example:
 
-```bash
-purs recognize --input-csv examples/basic_recognition/input.csv --output-dir output/basic
-```
+1. `examples/opecm_standard_demo/`
+   - based on `data/testing/opecm_paper54_tasks.csv`
+   - intended as the single public sample workflow for the package
 
-### PUFp
-
-```bash
-purs fingerprint --input-csv examples/pufp_mobility_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/pufp_mobility_demo
-```
-
-### Traditional ML
+Recommended command:
 
 ```bash
-purs ml rf --feature-csv output/pufp_mobility_demo/number.csv --target-csv examples/pufp_mobility_demo/target.csv --id-column sample_id --target-column target --quick
+python scripts/run_opecm_osc_unified_example.py --output-dir output/opecm_standard_demo
 ```
 
-### PUGraph
+Optional graph execution:
 
 ```bash
-purs graph build --input-csv examples/pugraph_demo/input.csv --output-dir output/graph_demo
-purs graph train --config output/graph_demo/pu_gn_exp_train.yaml
+python scripts/run_opecm_osc_unified_example.py --output-dir output/opecm_standard_demo --execute-graphs
 ```
 
-## Recommended Example Order
-
-Keep the public example set small and general:
-
-1. `examples/basic_recognition/`
-   - smallest core example
-2. `examples/pufp_mobility_demo/`
-   - recommended `PUFp + ML` example
-3. `examples/pugraph_demo/`
-   - recommended graph example
-
-Other example folders are retained as supplementary reference material, not as primary package entry points.
+Other example folders are retained as supplementary reference material and focused maintenance slices.
+They are now stored under `repro/supplementary_examples/`.
 
 ## Repository Structure
 

@@ -245,9 +245,9 @@ flowchart LR
 对于发布包，推荐路径是：
 
 1. 先看 `examples/README.md`
-2. 先跑 `examples/basic_recognition/`
-3. 再跑 `examples/pufp_mobility_demo/`
-4. 最后跑 `examples/pugraph_demo/`
+2. 先跑 `repro/supplementary_examples/basic_recognition/`
+3. 再跑 `repro/supplementary_examples/pufp_mobility_demo/`
+4. 最后跑 `repro/supplementary_examples/pugraph_demo/`
 
 如果需要查看程序包已经实际跑通的发布前验收，可再看：
 

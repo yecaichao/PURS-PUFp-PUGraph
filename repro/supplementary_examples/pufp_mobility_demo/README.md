@@ -21,13 +21,13 @@ Source:
 Generate fingerprints:
 
 ```bash
-purs fingerprint --input-csv examples/pufp_mobility_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/pufp_mobility_demo
+purs fingerprint --input-csv repro/supplementary_examples/pufp_mobility_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/pufp_mobility_demo
 ```
 
 Run a lightweight baseline:
 
 ```bash
-purs ml rf --feature-csv output/pufp_mobility_demo/number.csv --target-csv examples/pufp_mobility_demo/target.csv --id-column sample_id --target-column target --quick
+purs ml rf --feature-csv output/pufp_mobility_demo/number.csv --target-csv repro/supplementary_examples/pufp_mobility_demo/target.csv --id-column sample_id --target-column target --quick
 ```
 
 You can replace `rf` with:

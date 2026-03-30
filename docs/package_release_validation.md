@@ -16,11 +16,9 @@ coherent before release.
 
 ## Recommended release-facing examples
 
-1. `examples/basic_recognition/`
-2. `examples/pufp_mobility_demo/`
-3. `examples/pugraph_demo/`
+1. `examples/opecm_standard_demo/`
 
-These examples are the intended package entry points.
+This is the intended public package entry point.
 Internal `tests/` and smoke scripts are retained for maintenance, but they are not the main
 release story.
 
@@ -33,7 +31,7 @@ Validated through:
 - `PUFp + Features + Descriptors` baseline runs on OPECM-derived OSC subsets
 - paper54-style classification benchmark
 - package-level standard sample table `data/testing/opecm_paper54_tasks.csv`
-- release-facing `examples/pufp_mobility_demo/` run
+- release-facing `repro/supplementary_examples/pufp_mobility_demo/` run
 
 Key result files:
 
@@ -48,14 +46,14 @@ Key result files:
 
 Validated on:
 
-- `examples/pugraph_demo/input.csv`
+- `repro/supplementary_examples/pugraph_demo/input.csv`
 - data derived from the standard master sample table `data/testing/opecm_paper54_tasks.csv`
 
 Executed commands:
 
 ```powershell
 $env:PYTHONPATH='src'
-python -m purs.cli graph build --input-csv examples/pugraph_demo/input.csv --output-dir output/release_graph_demo
+python -m purs.cli graph build --input-csv repro/supplementary_examples/pugraph_demo/input.csv --output-dir output/release_graph_demo
 python -m purs.cli graph train --config output/release_graph_demo/pu_gn_exp_train.yaml
 python -m purs.cli graph train --config output/release_graph_demo/pu_mpnn_train.yaml
 python -m purs.cli graph train --config output/release_graph_demo/pu_gn_exp_train_execute.yaml
@@ -109,24 +107,21 @@ Key result file:
 
 ### 4. Current release-facing sample run
 
-The current release-facing example pass was rerun after standardizing the package on
-`data/testing/opecm_paper54_tasks.csv`.
+The current release-facing example pass is centered on
+`examples/opecm_standard_demo/`, using `data/testing/opecm_paper54_tasks.csv` as the single public
+sample source.
 
 Observed results:
 
-- `examples/basic_recognition/`
-  - processed samples: `4`
-  - skipped rows: `0`
-- `examples/pufp_mobility_demo/`
-  - processed samples: `8`
-  - skipped rows: `0`
-- `examples/pugraph_demo/`
-  - `graph build` processed samples: `8`
-  - `PU-gn-exp` completed in both `command_only` and `execute`
-  - `PU-MPNN` completed in both `command_only` and `execute`
+- unified standard-demo runner completed from the master table
+- focused workflow slices were also rerun successfully during release preparation:
+  - `basic_recognition`
+  - `pufp_mobility_demo`
+  - `pugraph_demo`
 
 Key result files:
 
+- `output/opecm_osc_unified_example_master/summary.json`
 - `output/release_final_basic/run_summary.json`
 - `output/release_final_pufp/run_summary.json`
 - `output/release_final_graph/graph_build_manifest.json`

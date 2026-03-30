@@ -15,5 +15,5 @@ Files:
 Recommended next use:
 
 ```bash
-purs recognize --input-csv examples/opecm_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/opecm_demo
+purs recognize --input-csv repro/supplementary_examples/opecm_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/opecm_demo
 ```

@@ -22,9 +22,7 @@
 对外使用时，建议优先看：
 
 1. `examples/README.md`
-2. `examples/basic_recognition/`
-3. `examples/pufp_mobility_demo/`
-4. `examples/pugraph_demo/`
+2. `examples/opecm_standard_demo/`
 
 也就是说，优先从 `examples/` 进入，而不是先看 `tests/` 或内部 smoke 脚本。
 
@@ -64,76 +62,42 @@ pip install -e .[all]
 - `environments/environment-graph.yml`
 - `environments/environment-all.yml`
 
-## 4. 推荐样例顺序
+## 4. 推荐公开样例
 
-### 4.1 PURS 最小样例
-
-路径：
-
-- `examples/basic_recognition/`
-
-命令：
-
-```bash
-purs recognize --input-csv examples/basic_recognition/input.csv --output-dir output/basic
-```
-
-这个样例适合先确认：
-
-- 包是否安装正常
-- `PURS` 是否能正确读取 `SMILES`
-- 标准输出文件是否生成
-
-### 4.2 PUFp + ML 样例
+### 4.1 OPECM 标准样例
 
 路径：
 
-- `examples/pufp_mobility_demo/`
+- `examples/opecm_standard_demo/`
 
-命令：
-
-```bash
-purs fingerprint --input-csv examples/pufp_mobility_demo/input.csv --name-column sample_id --smiles-column smiles --output-dir output/pufp_mobility_demo
-```
-
-然后：
+主命令：
 
 ```bash
-purs ml rf --feature-csv output/pufp_mobility_demo/number.csv --target-csv examples/pufp_mobility_demo/target.csv --id-column sample_id --target-column target --quick
+python scripts/run_opecm_osc_unified_example.py --output-dir output/opecm_standard_demo
 ```
 
-如果需要，也可以把 `rf` 换成：
+这个统一样例会基于主表：
 
-- `krr`
-- `svm`
+- `data/testing/opecm_paper54_tasks.csv`
 
-### 4.3 PUGraph 样例
+串起以下流程：
 
-路径：
+- 分类总结
+- `PUFp` 回归 quick baseline
+- `ue` / `uh` 图输入构建
+- `PU-gn-exp` 与 `PU-MPNN` 的包装配置检查
 
-- `examples/pugraph_demo/`
-
-命令：
+如果还要执行图后端：
 
 ```bash
-purs graph build --input-csv examples/pugraph_demo/input.csv --output-dir output/graph_demo
+python scripts/run_opecm_osc_unified_example.py --output-dir output/opecm_standard_demo --execute-graphs
 ```
 
-然后：
+如果你只想先做最小直接检查，也可以运行：
 
 ```bash
-purs graph train --config output/graph_demo/pu_gn_exp_train.yaml
+purs recognize --input-csv data/testing/opecm_paper54_tasks.csv --name-column sample_id --smiles-column smiles --output-dir output/opecm_standard_demo/recognize
 ```
-
-```bash
-purs graph train --config output/graph_demo/pu_mpnn_train.yaml
-```
-
-这个样例的重点是：
-
-- 构建统一 graph 输入
-- 生成 manifest
-- 生成 `PU-gn-exp` 和 `PU-MPNN` 的 starter config
 
 ## 5. 当前推荐的理解方式
 
@@ -152,11 +116,10 @@ purs graph train --config output/graph_demo/pu_mpnn_train.yaml
 
 ## 6. 发布前内部验收
 
-虽然发布包本身不强调测试入口，但发布前建议至少做一次样例级验收：
+虽然发布包本身不强调测试入口，但发布前建议至少做一次主样例级验收：
 
-1. 跑 `basic_recognition`
-2. 跑 `pufp_mobility_demo`
-3. 跑 `pugraph_demo`
+1. 跑 `examples/opecm_standard_demo/`
+2. 如有需要，再补跑聚焦样例
 
 本仓库已经记录了一次实际跑通的发布前验收：
 
@@ -168,8 +131,7 @@ purs graph train --config output/graph_demo/pu_mpnn_train.yaml
 
 1. 先装环境
 2. 先看 `examples/README.md`
-3. 先跑 `basic_recognition`
-4. 再跑 `pufp_mobility_demo`
-5. 最后跑 `pugraph_demo`
+3. 直接跑 `examples/opecm_standard_demo/`
+4. 如有需要，再看补充样例
 
-这样最顺，也最符合这个统一软件包当前的设计方式。
+这样最顺，也最符合这个统一软件包当前的发布方式。
