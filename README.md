@@ -16,9 +16,6 @@ This release keeps one public example:
 
 - `examples/opecm_standard_demo/`
 
-It is backed by one standard sample table:
-
-- `data/testing/opecm_paper54_tasks.csv`
 
 Recommended command:
 
