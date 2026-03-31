@@ -1,4 +1,7 @@
-﻿# PURS-PUFp-PUGraph
+
+# PURS-PUFp-PUGraph
+
+![幻灯片4](https://github.com/user-attachments/assets/349d38b8-5e86-4ab4-9011-c78968264558)
 
 Unified Python package for:
 
@@ -60,7 +63,6 @@ PURS-PUFp-PUGraph/
 ## Documentation
 
 - `examples/README.md`
-- `docs/package_quickstart_zh.md`
 - `docs/package_architecture_zh.md`
 
 ## License
