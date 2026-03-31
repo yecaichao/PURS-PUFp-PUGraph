@@ -68,3 +68,12 @@ PURS-PUFp-PUGraph/
 ## License
 
 This project is released under the MIT License. See `LICENSE`.
+
+## When using this database in your research PLEASE cite the papers:  
+
+[1] Xiumin Liu, Xinyue Zhang, Yabei Wu, Xuehai Ju, Caichao Ye*, Wenqing Zhang*. OPECM: A comprehensive dataset for organic polymer energy conversion materials enabling data-driven interpretative analysis. Phys. Rev. Mater., 2025, 9, 125405.  
+[2] Xinyue Zhang, Ye Sheng, Xiumin Liu, Jiong Yang, William A. Goddard III, Caichao Ye*, Wenqing Zhang*. Polymer-unit Graph: Advancing Interpretability in Graph Neural Network Machine Learning for Organic Polymer Semiconductor Materials. J. Chem. Theory Comput., 2024, 20(7), 2908-2920.  
+[3] Xinyue Zhang, Genwang Wei, Ye Sheng, Wenjun Bai, Jiong Yang, Wenqing Zhang*, Caichao Ye*. Polymer-Unit Fingerprint (PUFp): An Accessible Expression of Polymer Organic Semiconductors for Machine Learning. ACS Appl. Mater. Interfaces, 2023, 15(17), 21537–21548.  
+[4] Xiumin Liu, Xinyue Zhang, Ye Sheng, Zihe Zhang, Pan Xiong*, Xuehai Ju*, Junwu Zhu, Caichao Ye*. Advancing Organic Photovoltaic Materials by Machine Learning-Driven Design with Polymer-Unit Fingerprints. npj Comput. Mater., 2025, 11, 107.  
+[5] Caichao Ye, Tao Feng, Weishu Liu*, Wenqing Zhang*. Functional Unit: A New Perspective on Materials Science Research Paradigms. Acc. Mater. Res., 2025, 6(8), 914-920.
+
