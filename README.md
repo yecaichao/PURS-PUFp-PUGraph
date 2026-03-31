@@ -1,8 +1,7 @@
 
 # PURS-PUFp-PUGraph
 
-[幻灯片4-min.tif](https://github.com/user-attachments/files/26364103/4-min.tif)
-
+<img width="886" height="580" alt="image" src="https://github.com/user-attachments/assets/90747922-0dba-4197-b3a6-b6fef30e9ca7" />
 
 Unified Python package for:
 
